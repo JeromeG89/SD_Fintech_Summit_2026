@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { SuccessModal } from "./SuccessModal";
 
 export default function SignupForm() {
   const [status, setStatus] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget; // capture reference now
+    setSubmitting(true);
+    setStatus(null);
+
+    const form = e.currentTarget;
     const formData = new FormData(form);
 
     const data = {
@@ -18,21 +26,27 @@ export default function SignupForm() {
       teamName: formData.get("teamName") as string,
     };
 
-    // send request
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (res.ok) {
-      setStatus("✅ Thanks for signing up!");
-      form.reset(); // works because we stored `form` earlier
-    } else {
-      const err = await res.json();
-      setStatus(`❌ ${err.error}`);
+      if (res.ok) {
+        setSuccessOpen(true);
+        form.reset();
+      } else {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        setStatus(`❌ ${err.error}`);
+      }
+    } catch {
+      setStatus("❌ Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   }
+
 
   return (
     <div className="max-w-lg w-full bg-white shadow-xl rounded-2xl p-8 text-gray-900">
@@ -118,6 +132,17 @@ export default function SignupForm() {
           {status}
         </p>
       )}
+
+      <SuccessModal
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        onOk={() => {
+          setSuccessOpen(false);
+          router.replace("/");
+        }}
+        title="✅ Thanks for signing up!"
+        message="Your registration was successful. Click OK to go to your dashboard."
+      />
     </div>
   );
 }
