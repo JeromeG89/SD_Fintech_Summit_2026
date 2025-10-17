@@ -37,8 +37,9 @@ export default function SignupForm() {
         setSuccessOpen(true);
         form.reset();
       } else {
+        console.log(res);
         const err = await res.json().catch(() => ({ error: "Unknown error" }));
-        setStatus(`❌ ${err.error}`);
+        setStatus(`❌ ${err.message}`);
       }
     } catch {
       setStatus("❌ Network error. Please try again.");
@@ -84,7 +85,7 @@ export default function SignupForm() {
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">
-            Organisation
+            Organisation / School
           </label>
           <input
             type="text"
