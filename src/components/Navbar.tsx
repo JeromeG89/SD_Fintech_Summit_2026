@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav ref={navRef} className="bg-nav-backround shadow-md w-full">
+    <nav ref={navRef} className="bg-indigo-950 shadow-md w-full">
       {/* Wrapper to display Mobile dropdown */}
       <div className="w-full">
         {/* Main Nav Bar Wrapper */}

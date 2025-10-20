@@ -39,7 +39,7 @@ export default function SignupForm() {
 	}
 
 	return (
-		<div className="max-w-4xl w-full bg-indigo-900 shadow-xl rounded-2xl p-8 text-white">
+		<div className="max-w-5xl w-full bg-indigo-900 shadow-xl rounded-2xl p-8 text-white">
 			<h1 className="text-4xl font-extrabold mb-6 text-gold-500">
 				NUS Fintech Summit Hackathon 2026
 			</h1>
