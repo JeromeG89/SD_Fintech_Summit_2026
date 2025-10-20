@@ -7,9 +7,11 @@ export const teams = pgTable("teams", {
 
 export const signups = pgTable("signups", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),
-  organisation: text("organisation"),
+  faculty: text("faculty").notNull(),
+  major: text("major").notNull(),
   interest: text("interest"),
   teamId: integer("team_id").references(() => teams.id),
   createdAt: timestamp("created_at").defaultNow(),
