@@ -13,7 +13,9 @@ export async function POST(req: Request) {
 			major,
 			interest,
 			teamName,
-			isIndividual,
+			teamSize,
+			participantType,
+			problemStatement
 		} = await req.json();
 
 		if (!firstName || !lastName || !email || !teamName) {
@@ -25,15 +27,15 @@ export async function POST(req: Request) {
 
 		// Ensure team exists
 		let team;
-		if (!!teamName && !isIndividual) {
+		if (!!teamName && participantType === "team") {
 			await db.query.teams.findFirst({
 				where: eq(teams.name, teamName),
 			});
 		}
-		if (!team && !isIndividual) {
+		if (!team && participantType === "team") {
 			const [inserted] = await db
 				.insert(teams)
-				.values({ name: teamName })
+				.values({ name: teamName, size: teamSize, problemStatement })
 				.returning();
 			team = inserted;
 		}
