@@ -58,24 +58,24 @@ export default function SignupForm() {
 				<div className="flex gap-4">
 					<div className="flex-1">
 						<label className="block text-sm font-semibold mb-1">
-							First Name
+							First Name*
 						</label>
 						<input
 							type="text"
 							name="firstName"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						/>
 					</div>
 					<div className="flex-1">
 						<label className="block text-sm font-semibold mb-1">
-							Last Name
+							Last Name*
 						</label>
 						<input
 							type="text"
 							name="lastName"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						/>
 					</div>
 				</div>
@@ -83,13 +83,13 @@ export default function SignupForm() {
 				{/* Email */}
 				<div>
 					<label className="block text-sm font-semibold mb-1">
-						Email
+						Email*
 					</label>
 					<input
 						type="email"
 						name="email"
 						required
-						className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+						className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 					/>
 				</div>
 
@@ -97,12 +97,12 @@ export default function SignupForm() {
 				<div className="flex gap-4">
 					<div className="flex-1">
 						<label className="block text-sm font-semibold mb-1">
-							Faculty
+							Faculty*
 						</label>
 						<select
 							name="faculty"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						>
 							<option value="">Select Faculty</option>
 							<option>School of Computing</option>
@@ -112,12 +112,12 @@ export default function SignupForm() {
 					</div>
 					<div className="flex-1">
 						<label className="block text-sm font-semibold mb-1">
-							Major
+							Major*
 						</label>
 						<select
 							name="major"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						>
 							<option value="">Select Major</option>
 							<option>Computer Science</option>
@@ -128,33 +128,46 @@ export default function SignupForm() {
 				</div>
 				<div className="w-full border-t border-white my-2"></div>
 				<label className="block text-lg font-bold mb-1 uppercase">
-					General Information
+					Hackathon
 				</label>
 				{/* Participant Type */}
 				<div>
-					<label className="block text-sm font-semibold mb-1">
-						Please indicate if you are applying as a team.
-					</label>
-					<div className="flex gap-6">
-						<label className="flex items-center gap-2">
-							<input
-								type="radio"
-								name="participantType"
-								value="team"
-								defaultChecked
-								className="accent-gold-500"
-							/>
-							Team
+					<div>
+						<label className="block text-sm font-semibold mb-2">
+							Please indicate if you are applying as a team
 						</label>
-						<label className="flex items-center gap-2">
-							<input
-								type="radio"
-								name="participantType"
-								value="individual"
-								className="accent-gold-500"
-							/>
-							Individual
-						</label>
+						<div className="flex flex-col space-y-3">
+							<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+								<input
+									type="radio"
+									name="participantType"
+									value="team"
+									defaultChecked
+									className="peer h-5 w-5 accent-gold-500"
+								/>
+								<span className="font-medium">
+									Yes, I am applying as a team
+								</span>
+
+								{/* Border highlight when selected */}
+								<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							</label>
+
+							<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+								<input
+									type="radio"
+									name="participantType"
+									value="individual"
+									className="peer h-5 w-5 accent-gold-500"
+								/>
+								<span className="font-medium">
+									No, I am applying as an individual
+									participant for now
+								</span>
+
+								<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							</label>
+						</div>
 					</div>
 				</div>
 
@@ -167,7 +180,7 @@ export default function SignupForm() {
 						<input
 							type="text"
 							name="teamName"
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						/>
 					</div>
 					<div className="flex-1">
@@ -176,7 +189,7 @@ export default function SignupForm() {
 						</label>
 						<select
 							name="teamSize"
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						>
 							<option value="">Select Size</option>
 							<option>2</option>
@@ -188,58 +201,77 @@ export default function SignupForm() {
 
 				{/* Problem Statement */}
 				<div>
-					<label className="block text-sm font-semibold mb-2">
-						Problem Statement
+					<label className="block text-sm font-semibold mb-3">
+						Please select the Problem Statement
 					</label>
-					<div className="space-y-2">
-						<label className="flex items-center space-x-2 cursor-pointer">
+					<div className="flex flex-col space-y-3">
+						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
 							<input
 								type="radio"
 								name="problemStatement"
 								value="ps1"
 								required
-								className="form-radio h-4 w-4 text-blue-600"
+								className="peer h-5 w-5 accent-gold-500 mt-1"
 							/>
-							<span className="">
+							<span className="font-medium">
 								How can AI and machine learning be applied to
 								enhance compliance and risk management for
 								financial institutions leveraging blockchain?
 							</span>
+							{/* Border highlight on selection */}
+							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
 						</label>
 
-						<label className="flex items-center space-x-2 cursor-pointer">
+						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
 							<input
 								type="radio"
 								name="problemStatement"
 								value="ps2"
 								required
-								className="form-radio h-4 w-4 text-blue-600"
+								className="peer h-5 w-5 accent-gold-500 mt-1"
 							/>
-							<span className="">
+							<span className="font-medium">
 								How can AI and machine learning improve fintech
 								user experience and engagement?
 							</span>
+							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
 						</label>
 					</div>
 				</div>
-
 				{/* Disclaimer */}
-				<div className="flex items-center gap-2">
-					<input
-						type="checkbox"
-						name="disclaimer"
-						required
-						className="accent-gold-500"
-					/>
-					<span className="text-sm">
-						I agree to the terms and conditions of this hackathon.
-					</span>
+				<div className="flex flex-col gap-2">
+					<label className="block text-sm font-semibold">
+						Disclaimer
+					</label>
+					<p className="text-sm">
+						By submitting this application, I confirm that the
+						information provided is accurate to the best of my
+						knowledge. I understand that participation in the
+						hackathon is subject to the organizer's approval. I
+						consent to the use of any photo or video material taken
+						during the event by the organizers for promotional
+						purposes, including but not limited to social media,
+						websites, and future marketing materials. I also
+						understand that any submissions, ideas, and projects
+						developed during the hackathon may be publicly showcased
+						or shared with the organizing team, partners, and the
+						organization that presented the challenge we worked on.
+					</p>
+					<div className="flex items-center gap-2">
+						<input
+							type="checkbox"
+							name="disclaimer"
+							required
+							className="h-5 w-5 rounded-md accent-gold-500"
+						/>
+						<span className="text-sm">I agree.</span>
+					</div>
 				</div>
 
 				<div className="w-full flex justify-center">
 					<button
 						type="submit"
-						className="bg-indigo-600 font-semibold py-2 px-6 rounded-lg shadow hover:bg-gold-600 transition-colors"
+						className="text-lg bg-indigo-600 font-semibold py-2 px-8 rounded-xl shadow hover:bg-gold-600 transition-colors"
 					>
 						Submit
 					</button>
