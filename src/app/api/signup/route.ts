@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { signups, teams } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 
 export async function POST(req: Request) {
 	try {
@@ -15,43 +15,62 @@ export async function POST(req: Request) {
 			teamName,
 			teamSize,
 			participantType,
-			problemStatement
+			problemStatement,
+			joinTeam,
 		} = await req.json();
 
-		if (!firstName || !lastName || !email || !teamName) {
+		if (!firstName || !lastName || !email) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
 			);
 		}
 
-		// Ensure team exists
+		if (participantType === "team" && !teamName) {
+			return NextResponse.json(
+				{ error: "Team name is required for team participants" },
+				{ status: 400 }
+			);
+		}
+
+		const [newSignup] = await db
+			.insert(signups)
+			.values({ firstName, lastName, email, faculty, major, interest })
+			.returning();
+
+		// Create or join existing team
 		let team;
-		if (!!teamName && participantType === "team") {
-			await db.query.teams.findFirst({
-				where: eq(teams.name, teamName),
-			});
-		}
-		if (!team && participantType === "team") {
-			const [inserted] = await db
-				.insert(teams)
-				.values({ name: teamName, size: teamSize, problemStatement })
-				.returning();
-			team = inserted;
+		if (participantType === "team") {
+			if (joinTeam) {
+				team = await db.query.teams.findFirst({
+					where: ilike(teams.name, teamName),
+				});
+
+				if (!team) {
+					return NextResponse.json(
+						{
+							error: "Team not found. Please check the team name or ID.",
+						},
+						{ status: 404 }
+					);
+				}
+			} else {
+				const [insertedTeam] = await db
+					.insert(teams)
+					.values({
+						name: teamName,
+						size: teamSize,
+						problemStatement,
+						adminId: newSignup.id, // the new signup becomes admin
+						signupId: newSignup.id,
+					})
+					.returning();
+
+				team = insertedTeam;
+			}
 		}
 
-		// Insert signup
-		await db.insert(signups).values({
-			firstName,
-			lastName,
-			email,
-			faculty,
-			major,
-			interest,
-			teamId: team?.id,
-		});
-
-		return NextResponse.json({ success: true });
+		return NextResponse.json({ success: true, signup: newSignup, team });
 	} catch (err: any) {
 		const pgError = err.cause ?? err;
 

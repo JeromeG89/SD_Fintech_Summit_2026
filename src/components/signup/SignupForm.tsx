@@ -4,6 +4,11 @@ import { useState } from "react";
 
 export default function SignupForm() {
 	const [status, setStatus] = useState<string | null>(null);
+	const [participantType, setParticipantType] = useState<
+		"team" | "individual"
+	>("team");
+	const [joinTeam, setJoinTeam] = useState<boolean>(false);
+	const [teamSearch, setTeamSearch] = useState<string>("");
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -21,6 +26,7 @@ export default function SignupForm() {
 			teamSize: formData.get("teamSize") as string,
 			problemStatement: formData.get("problemStatement") as string,
 			disclaimer: formData.get("disclaimer") === "on",
+			joinTeam,
 		};
 
 		const res = await fetch("/api/signup", {
@@ -46,14 +52,16 @@ export default function SignupForm() {
 			<p className="text-left text-lg text-gray-200 mb-8">
 				NUS Fintech Summit aims to educate students with Fintech
 				knowledge through events and industry projects, and connect and
-				establish relationship with industry leaders.
+				establish relationships with industry leaders.
 			</p>
 
 			<form onSubmit={handleSubmit} className="space-y-6">
+				{/* General Information */}
 				<div className="w-full border-t border-white my-2"></div>
 				<label className="block text-lg font-bold mb-1 uppercase">
 					General Information
 				</label>
+
 				{/* First & Last Name */}
 				<div className="flex gap-4">
 					<div className="flex-1">
@@ -102,12 +110,16 @@ export default function SignupForm() {
 						<select
 							name="faculty"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
 						>
-							<option value="">Select Faculty</option>
-							<option>School of Computing</option>
-							<option>Business</option>
-							<option>Engineering</option>
+							<option className="bg-gray-800" value="">
+								Select Faculty
+							</option>
+							<option className="bg-gray-800">
+								School of Computing
+							</option>
+							<option className="bg-gray-800">Business</option>
+							<option className="bg-gray-800">Engineering</option>
 						</select>
 					</div>
 					<div className="flex-1">
@@ -117,87 +129,162 @@ export default function SignupForm() {
 						<select
 							name="major"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+							className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
 						>
-							<option value="">Select Major</option>
-							<option>Computer Science</option>
-							<option>Finance</option>
-							<option>Information Systems</option>
+							<option className="bg-gray-800" value="">
+								Select Major
+							</option>
+							<option className="bg-gray-800">
+								Computer Science
+							</option>
+							<option className="bg-gray-800">Finance</option>
+							<option className="bg-gray-800">
+								Information Systems
+							</option>
 						</select>
 					</div>
 				</div>
+
+				{/* Hackathon Section */}
 				<div className="w-full border-t border-white my-2"></div>
 				<label className="block text-lg font-bold mb-1 uppercase">
 					Hackathon
 				</label>
+
 				{/* Participant Type */}
 				<div>
-					<div>
-						<label className="block text-sm font-semibold mb-2">
-							Please indicate if you are applying as a team
+					<label className="block text-sm font-semibold mb-2">
+						Please indicate if you are applying as a team
+					</label>
+					<div className="flex flex-col space-y-3">
+						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+							<input
+								type="radio"
+								name="participantType"
+								value="team"
+								checked={participantType === "team"}
+								onChange={() => setParticipantType("team")}
+								className="peer h-5 w-5 accent-gold-500"
+							/>
+							<span className="font-medium">
+								Yes, I am applying as a team
+							</span>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
 						</label>
-						<div className="flex flex-col space-y-3">
-							<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
-								<input
-									type="radio"
-									name="participantType"
-									value="team"
-									defaultChecked
-									className="peer h-5 w-5 accent-gold-500"
-								/>
-								<span className="font-medium">
-									Yes, I am applying as a team
-								</span>
 
-								{/* Border highlight when selected */}
-								<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
-							</label>
+						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+							<input
+								type="radio"
+								name="participantType"
+								value="individual"
+								checked={participantType === "individual"}
+								onChange={() =>
+									setParticipantType("individual")
+								}
+								className="peer h-5 w-5 accent-gold-500"
+							/>
+							<span className="font-medium">
+								No, I am applying as an individual participant
+							</span>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+						</label>
+					</div>
+				</div>
 
-							<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
-								<input
-									type="radio"
-									name="participantType"
-									value="individual"
-									className="peer h-5 w-5 accent-gold-500"
-								/>
-								<span className="font-medium">
-									No, I am applying as an individual
-									participant for now
-								</span>
+				{/* Team Name & Size (only show if participantType === 'team') */}
+				{participantType === "team" && (
+					<div className="flex gap-4">
+						<div className="flex-1">
+							{participantType === "team" && (
+								<div>
+									<div className="flex border-2 border-gray-600 rounded-lg overflow-hidden w-fit mb-4">
+										<button
+											type="button"
+											onClick={() => setJoinTeam(false)}
+											className={`px-5 py-2 transition-colors duration-200 font-medium ${
+												!joinTeam
+													? "bg-yellow-500 text-white"
+													: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+											}`}
+										>
+											New Team
+										</button>
+										<button
+											type="button"
+											onClick={() => setJoinTeam(true)}
+											className={`px-5 py-2 transition-colors duration-200 font-medium ${
+												joinTeam
+													? "bg-yellow-500 text-white"
+													: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+											}`}
+										>
+											Existing Team
+										</button>
+									</div>
 
-								<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
-							</label>
+									{joinTeam ? (
+										// Join existing team
+										<div>
+											<label className="block text-sm font-semibold mb-1">
+												Existing Team Name or ID
+											</label>
+											<input
+												type="text"
+												value={teamSearch}
+												onChange={(e) =>
+													setTeamSearch(
+														e.target.value
+													)
+												}
+												className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+												placeholder="Enter existing team name or ID"
+											/>
+										</div>
+									) : (
+										<div className="flex gap-4">
+											<div className="flex-1">
+												<label className="block text-sm font-semibold mb-1">
+													New Team Name
+												</label>
+												<input
+													type="text"
+													name="teamName"
+													className="p-2 rounded-lg w-full border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+													placeholder="Enter new team name"
+												/>
+											</div>
+											<div className="flex-1">
+												<label className="block text-sm font-semibold mb-1">
+													Team Size
+												</label>
+												<select
+													name="teamSize"
+													className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+												>
+													<option
+														className="bg-gray-800"
+														value=""
+													>
+														Select Size
+													</option>
+													<option className="bg-gray-800">
+														2
+													</option>
+													<option className="bg-gray-800">
+														3
+													</option>
+													<option className="bg-gray-800">
+														4
+													</option>
+												</select>
+											</div>
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 					</div>
-				</div>
-
-				{/* Team Name & Size */}
-				<div className="flex gap-4">
-					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
-							Team Name
-						</label>
-						<input
-							type="text"
-							name="teamName"
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-						/>
-					</div>
-					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
-							Team Size
-						</label>
-						<select
-							name="teamSize"
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-						>
-							<option value="">Select Size</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-						</select>
-					</div>
-				</div>
+				)}
 
 				{/* Problem Statement */}
 				<div>
@@ -218,7 +305,6 @@ export default function SignupForm() {
 								enhance compliance and risk management for
 								financial institutions leveraging blockchain?
 							</span>
-							{/* Border highlight on selection */}
 							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
 						</label>
 
@@ -238,6 +324,7 @@ export default function SignupForm() {
 						</label>
 					</div>
 				</div>
+
 				{/* Disclaimer */}
 				<div className="flex flex-col gap-2">
 					<label className="block text-sm font-semibold">
@@ -245,17 +332,7 @@ export default function SignupForm() {
 					</label>
 					<p className="text-sm">
 						By submitting this application, I confirm that the
-						information provided is accurate to the best of my
-						knowledge. I understand that participation in the
-						hackathon is subject to the organizer's approval. I
-						consent to the use of any photo or video material taken
-						during the event by the organizers for promotional
-						purposes, including but not limited to social media,
-						websites, and future marketing materials. I also
-						understand that any submissions, ideas, and projects
-						developed during the hackathon may be publicly showcased
-						or shared with the organizing team, partners, and the
-						organization that presented the challenge we worked on.
+						information provided is accurate...
 					</p>
 					<div className="flex items-center gap-2">
 						<input
