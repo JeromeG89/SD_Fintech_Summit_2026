@@ -45,100 +45,100 @@ export default function SignupForm() {
 	}
 
 	return (
-		<div className="max-w-5xl w-full bg-indigo-900 shadow-xl rounded-2xl p-8 text-white">
-			<h1 className="text-4xl font-extrabold mb-6 text-gold-500">
+		<div className="max-w-5xl w-full bg-indigo-950/90 backdrop-blur-sm shadow-2xl rounded-3xl p-6 md:p-8 text-white border border-indigo-800/50">
+			<h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-header-color text-center">
 				NUS Fintech Summit Hackathon 2026
 			</h1>
-			<p className="text-left text-lg text-gray-200 mb-8">
-				NUS Fintech Summit aims to educate students with Fintech
-				knowledge through events and industry projects, and connect and
-				establish relationships with industry leaders.
+			<p className="text-center text-base md:text-lg text-gray-300 mb-8 leading-relaxed">
+				NUS Fintech Summit aims to educate students with Fintech knowledge
+				through events and industry projects, and connect and establish
+				relationships with industry leaders.
 			</p>
 
-			<form onSubmit={handleSubmit} className="space-y-6">
+			<form onSubmit={handleSubmit} className="space-y-8">
 				{/* General Information */}
-				<div className="w-full border-t border-white my-2"></div>
-				<label className="block text-lg font-bold mb-1 uppercase">
-					General Information
+				<div className="w-full h-px bg-gradient-to-r from-transparent via-header-color to-transparent my-4"></div>
+				<label className="block text-xl font-bold mb-4 text-header-color uppercase tracking-wide">
+				General Information
 				</label>
 
 				{/* First & Last Name */}
-				<div className="flex gap-4">
+				<div className="flex flex-col md:flex-row gap-4">
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
-							First Name*
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
+						First Name*
 						</label>
 						<input
 							type="text"
 							name="firstName"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 						/>
 					</div>
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Last Name*
 						</label>
 						<input
 							type="text"
 							name="lastName"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 						/>
 					</div>
 				</div>
 
 				{/* Email */}
 				<div>
-					<label className="block text-sm font-semibold mb-1">
+					<label className="block text-sm font-semibold mb-2 text-gray-200">
 						Email*
 					</label>
 					<input
 						type="email"
 						name="email"
 						required
-						className="w-full rounded-lg border-2 border-white bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+						className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 					/>
 				</div>
 
 				{/* Faculty & Major */}
-				<div className="flex gap-4">
+				<div className="flex flex-col md:flex-row gap-4">
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
-							Faculty*
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
+						Faculty*
 						</label>
 						<select
 							name="faculty"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 						>
-							<option className="bg-gray-800" value="">
+							<option className="bg-gray-800 text-white" value="">
 								Select Faculty
 							</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">
 								School of Computing
 							</option>
-							<option className="bg-gray-800">Business</option>
-							<option className="bg-gray-800">Engineering</option>
+							<option className="bg-gray-800 text-white">Business</option>
+							<option className="bg-gray-800 text-white">Engineering</option>
 						</select>
 					</div>
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Major*
 						</label>
 						<select
 							name="major"
 							required
-							className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 						>
-							<option className="bg-gray-800" value="">
+							<option className="bg-gray-800 text-white" value="">
 								Select Major
 							</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">
 								Computer Science
 							</option>
-							<option className="bg-gray-800">Finance</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">Finance</option>
+							<option className="bg-gray-800 text-white">
 								Information Systems
 							</option>
 						</select>
@@ -146,134 +146,125 @@ export default function SignupForm() {
 				</div>
 
 				{/* Hackathon Section */}
-				<div className="w-full border-t border-white my-2"></div>
-				<label className="block text-lg font-bold mb-1 uppercase">
+				<div className="w-full h-px bg-gradient-to-r from-transparent via-header-color to-transparent my-4"></div>
+				<label className="block text-xl font-bold mb-4 text-header-color uppercase tracking-wide">
 					Hackathon
 				</label>
 
 				{/* Participant Type */}
 				<div>
-					<label className="block text-sm font-semibold mb-2">
+					<label className="block text-sm font-semibold mb-4 text-gray-200">
 						Please indicate if you are applying as a team
 					</label>
 					<div className="flex flex-col space-y-3">
-						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+						<label className="flex items-center gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer relative bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								name="participantType"
 								value="team"
 								checked={participantType === "team"}
 								onChange={() => setParticipantType("team")}
-								className="peer h-5 w-5 accent-gold-500"
+								className="peer h-5 w-5 accent-about-button"
 							/>
-							<span className="font-medium">
+							<span className="font-medium text-gray-200">
 								Yes, I am applying as a team
 							</span>
-							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-xl border-transparent peer-checked:border-about-button"></div>
 						</label>
 
-						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+						<label className="flex items-center gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer relative bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								name="participantType"
 								value="individual"
 								checked={participantType === "individual"}
-								onChange={() =>
+								onChange={() => 
 									setParticipantType("individual")
 								}
-								className="peer h-5 w-5 accent-gold-500"
+								className="peer h-5 w-5 accent-about-button"
 							/>
-							<span className="font-medium">
+							<span className="font-medium text-gray-200">
 								No, I am applying as an individual participant
 							</span>
-							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-xl border-transparent peer-checked:border-about-button"></div>
 						</label>
 					</div>
 				</div>
 
 				{/* Team Name & Size (only show if participantType === 'team') */}
 				{participantType === "team" && (
-					<div className="flex gap-4">
-						<div className="flex-1">
-							{participantType === "team" && (
-								<div>
-									<div className="flex border-2 border-gray-600 rounded-lg overflow-hidden w-fit mb-4">
-										<button
-											type="button"
-											onClick={() => setJoinTeam(false)}
-											className={`px-5 py-2 transition-colors duration-200 font-medium ${
-												!joinTeam
-													? "bg-yellow-500 text-white"
-													: "bg-gray-700 text-gray-300 hover:bg-gray-600"
-											}`}
-										>
-											New Team
-										</button>
-										<button
-											type="button"
-											onClick={() => setJoinTeam(true)}
-											className={`px-5 py-2 transition-colors duration-200 font-medium ${
-												joinTeam
-													? "bg-yellow-500 text-white"
-													: "bg-gray-700 text-gray-300 hover:bg-gray-600"
-											}`}
-										>
-											Existing Team
-										</button>
-									</div>
+					<div className="space-y-6">
+						<div>
+							<div className="flex border-2 border-gray-400/50 rounded-xl overflow-hidden w-fit mb-6 bg-white/5">
+								<button
+								type="button"
+								onClick={() => setJoinTeam(false)}
+								className={`px-6 py-3 transition-all duration-200 font-semibold ${
+									!joinTeam
+									? "bg-about-button text-white shadow-lg"
+									: "bg-transparent text-gray-300 hover:bg-white/10"
+								}`}
+								>
+									New Team
+								</button>
+								<button
+								type="button"
+								onClick={() => setJoinTeam(true)}
+								className={`px-6 py-3 transition-all duration-200 font-semibold ${
+									joinTeam
+									? "bg-about-button text-white shadow-lg"
+									: "bg-transparent text-gray-300 hover:bg-white/10"
+								}`}
+								>
+									Existing Team
+								</button>
+							</div>
 
 									{joinTeam ? (
 										// Join existing team
 										<div>
-											<label className="block text-sm font-semibold mb-1">
+											<label className="block text-sm font-semibold mb-2 text-gray-200">
 												Existing Team Name or ID
 											</label>
 											<input
 												type="text"
 												value={teamSearch}
-												onChange={(e) =>
-													setTeamSearch(
-														e.target.value
-													)
-												}
-												className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+												onChange={(e) => setTeamSearch(e.target.value)}
+												className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 												placeholder="Enter existing team name or ID"
 											/>
 										</div>
 									) : (
-										<div className="flex gap-4">
+										<div className="flex flex-col md:flex-row gap-4">
 											<div className="flex-1">
-												<label className="block text-sm font-semibold mb-1">
+												<label className="block text-sm font-semibold mb-2 text-gray-200">
 													New Team Name
 												</label>
 												<input
 													type="text"
 													name="teamName"
-													className="p-2 rounded-lg w-full border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+													className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 													placeholder="Enter new team name"
 												/>
 											</div>
 											<div className="flex-1">
-												<label className="block text-sm font-semibold mb-1">
+												<label className="block text-sm font-semibold mb-2 text-gray-200">
 													Team Size
 												</label>
 												<select
 													name="teamSize"
-													className="w-full rounded-lg border-2 border-white bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+													className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
 												>
-													<option
-														className="bg-gray-800"
-														value=""
-													>
+													<option className="bg-gray-800 text-white" value="">
 														Select Size
 													</option>
-													<option className="bg-gray-800">
+													<option className="bg-gray-800 text-white">
 														2
 													</option>
-													<option className="bg-gray-800">
+													<option className="bg-gray-800 text-white">
 														3
 													</option>
-													<option className="bg-gray-800">
+													<option className="bg-gray-800 text-white">
 														4
 													</option>
 												</select>
@@ -281,85 +272,92 @@ export default function SignupForm() {
 										</div>
 									)}
 								</div>
-							)}
-						</div>
-					</div>
-				)}
+							</div>
+						)}
 
 				{/* Problem Statement */}
 				<div>
-					<label className="block text-sm font-semibold mb-3">
+					<label className="block text-sm font-semibold mb-4 text-gray-200">
 						Please select the Problem Statement
 					</label>
 					<div className="flex flex-col space-y-3">
-						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
+						<label className="relative flex items-start gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								name="problemStatement"
 								value="ps1"
 								required
-								className="peer h-5 w-5 accent-gold-500 mt-1"
+								className="peer h-5 w-5 accent-about-button mt-1"
 							/>
-							<span className="font-medium">
-								How can AI and machine learning be applied to
-								enhance compliance and risk management for
-								financial institutions leveraging blockchain?
+							<span className="font-medium text-gray-200 leading-relaxed">
+								How can AI and machine learning be applied to enhance compliance
+								and risk management for financial institutions leveraging
+								blockchain?
 							</span>
-							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
+							<div className="absolute inset-0 border-2 rounded-xl border-transparent peer-checked:border-about-button pointer-events-none"></div>
 						</label>
 
-						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
+						<label className="relative flex items-start gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								name="problemStatement"
 								value="ps2"
 								required
-								className="peer h-5 w-5 accent-gold-500 mt-1"
+								className="peer h-5 w-5 accent-about-button mt-1"
 							/>
-							<span className="font-medium">
-								How can AI and machine learning improve fintech
-								user experience and engagement?
+							<span className="font-medium text-gray-200 leading-relaxed">
+								How can AI and machine learning improve fintech user experience
+								and engagement?
 							</span>
-							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
+							<div className="absolute inset-0 border-2 rounded-xl border-transparent peer-checked:border-about-button pointer-events-none"></div>
 						</label>
 					</div>
 				</div>
 
 				{/* Disclaimer */}
-				<div className="flex flex-col gap-2">
-					<label className="block text-sm font-semibold">
+				<div className="flex flex-col gap-4 p-4 bg-white/5 rounded-xl border border-gray-400/30">
+					<label className="block text-sm font-semibold text-gray-200">
 						Disclaimer
 					</label>
-					<p className="text-sm">
-						By submitting this application, I confirm that the
-						information provided is accurate...
+					<p className="text-sm text-gray-300 leading-relaxed">
+						By submitting this application, I confirm that the information
+						provided is accurate and I agree to the terms and conditions of the
+						NUS Fintech Summit Hackathon 2026.
 					</p>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-3">
 						<input
 							type="checkbox"
 							name="disclaimer"
 							required
-							className="h-5 w-5 rounded-md accent-gold-500"
+							className="h-5 w-5 rounded-md accent-about-button"
 						/>
-						<span className="text-sm">I agree.</span>
+						<span className="text-sm text-gray-200 font-medium">
+						I agree to the terms and conditions.
+						</span>
 					</div>
 				</div>
 
-				<div className="w-full flex justify-center">
+				<div className="w-full flex justify-center pt-4">
 					<button
 						type="submit"
-						className="text-lg bg-indigo-600 font-semibold py-2 px-8 rounded-xl shadow hover:bg-gold-600 transition-colors"
+						className="text-lg bg-about-button text-white font-bold py-4 px-12 rounded-xl shadow-lg hover:bg-about-button/90 hover:shadow-xl transition-all duration-200 transform hover:scale-105"
 					>
-						Submit
+						Submit Application
 					</button>
 				</div>
 			</form>
 
 			{status && (
-				<p className="mt-6 text-center text-sm font-medium text-white">
-					{status}
-				</p>
+				<div
+				className={`mt-6 p-4 rounded-xl text-center font-semibold ${
+					status.includes("✅")
+					? "bg-green-500/20 text-green-300 border border-green-500/30"
+					: "bg-red-500/20 text-red-300 border border-red-500/30"
+				}`}
+				>
+				{status}
+				</div>
 			)}
-		</div>
-	);
+			</div>
+		);
 }
