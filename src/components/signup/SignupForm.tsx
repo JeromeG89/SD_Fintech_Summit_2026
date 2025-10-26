@@ -228,6 +228,7 @@ export default function SignupForm() {
 											</label>
 											<input
 												type="text"
+												name="teamName"
 												value={teamSearch}
 												onChange={(e) => setTeamSearch(e.target.value)}
 												className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
@@ -276,7 +277,7 @@ export default function SignupForm() {
 						)}
 
 				{/* Problem Statement */}
-				<div>
+				{!joinTeam && <div>
 					<label className="block text-sm font-semibold mb-4 text-gray-200">
 						Please select the Problem Statement
 					</label>
@@ -312,7 +313,7 @@ export default function SignupForm() {
 							<div className="absolute inset-0 border-2 rounded-xl border-transparent peer-checked:border-about-button pointer-events-none"></div>
 						</label>
 					</div>
-				</div>
+				</div>}
 
 				{/* Disclaimer */}
 				<div className="flex flex-col gap-4 p-4 bg-white/5 rounded-xl border border-gray-400/30">

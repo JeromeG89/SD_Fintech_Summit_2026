@@ -11,11 +11,11 @@ export async function POST(req: Request) {
 			email,
 			faculty,
 			major,
-			interest,
+			participantType,
 			teamName,
 			teamSize,
-			participantType,
 			problemStatement,
+			disclaimer,
 			joinTeam,
 		} = await req.json();
 
@@ -32,29 +32,33 @@ export async function POST(req: Request) {
 				{ status: 400 }
 			);
 		}
+		let team;
+		team = await db.query.teams.findFirst({
+			where: ilike(teams.name, teamName),
+		});
+		if (!joinTeam && team) { //Create team but exists
+			return NextResponse.json(
+				{
+					error: "Team name already exists. Please use a different team name.",
+				},
+				{ status: 404 }
+			);
+		} else if (joinTeam && !team) { //Join team but dont exist
+			return NextResponse.json(
+				{
+					error: "Team not found. Please check the team name or ID.",
+				},
+				{ status: 404 }
+			);
+		}
 
 		const [newSignup] = await db
 			.insert(signups)
-			.values({ firstName, lastName, email, faculty, major, interest })
+			.values({ firstName, lastName, email, faculty, major,  })
 			.returning();
 
-		// Create or join existing team
-		let team;
-		if (participantType === "team") {
-			if (joinTeam) {
-				team = await db.query.teams.findFirst({
-					where: ilike(teams.name, teamName),
-				});
-
-				if (!team) {
-					return NextResponse.json(
-						{
-							error: "Team not found. Please check the team name or ID.",
-						},
-						{ status: 404 }
-					);
-				}
-			} else {
+		// Create team
+		if (participantType === "team" && !joinTeam) { 
 				const [insertedTeam] = await db
 					.insert(teams)
 					.values({
@@ -68,7 +72,6 @@ export async function POST(req: Request) {
 
 				team = insertedTeam;
 			}
-		}
 
 		return NextResponse.json({ success: true, signup: newSignup, team });
 	} catch (err: any) {
