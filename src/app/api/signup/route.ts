@@ -1,3 +1,4 @@
+// app/api/signup/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { signups, teams } from "@/db/schema";

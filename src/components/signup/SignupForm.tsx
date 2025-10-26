@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { SuccessModal } from "./SuccessModal";
 
 export default function SignupForm() {
 	const [status, setStatus] = useState<string | null>(null);
