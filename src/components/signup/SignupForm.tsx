@@ -21,7 +21,7 @@ const formSchema = z
 		problemStatement: z.enum(
 			["ps1", "ps2"],
 			"Please select a problem statement"
-		),
+		).optional(), // Make optional here, superRefine will handle the logic
 		disclaimer: z
 			.boolean()
 			.refine((val) => val === true, {
@@ -39,13 +39,14 @@ const formSchema = z
 						message: "Team name or ID is required",
 					});
 				}
+				// No problem statement needed when joining a team
 			} else {
 				// User is creating a new team
 				if (!data.teamName || data.teamName.trim() === "") {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,
 						path: ["teamName"],
-						message: "Team name is required",
+						message: "New team name is required",
 					});
 				}
 				if (!data.teamSize || data.teamSize === "") {
@@ -55,6 +56,22 @@ const formSchema = z
 						message: "Please select a team size",
 					});
 				}
+				if (!data.problemStatement) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						path: ["problemStatement"],
+						message: "Please select a problem statement",
+					});
+				}
+			}
+		} else {
+			// Individual participant
+			if (!data.problemStatement) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					path: ["problemStatement"],
+					message: "Please select a problem statement",
+				});
 			}
 		}
 	});
@@ -103,9 +120,9 @@ export default function SignupForm() {
 			reset();
 		} else {
 			const err = await res.json();
-			// Handle server-side validation errors (e.g., duplicate email)
-			if (err.field && ["email", "teamName"].includes(err.field)) {
-				setError(err.field as "email" | "teamName", {
+			// Handle server-side validation errors
+			if (err.field && ["email", "teamName", "teamSearch"].includes(err.field)) {
+				setError(err.field as "email" | "teamName" | "teamSearch", {
 					type: "server",
 					message: err.error,
 				});
@@ -116,37 +133,37 @@ export default function SignupForm() {
 	};
 
 	return (
-		<div className="max-w-5xl w-full bg-indigo-900 shadow-xl rounded-2xl p-8 text-white">
-			<h1 className="text-4xl font-extrabold mb-6 text-gold-500">
+		<div className="max-w-5xl w-full bg-indigo-950/90 backdrop-blur-sm shadow-2xl rounded-3xl p-6 md:p-8 text-white border border-indigo-800/50">
+			<h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-header-color text-center">
 				NUS Fintech Summit Hackathon 2026
 			</h1>
-			<p className="text-left text-lg text-gray-200 mb-8">
-				NUS Fintech Summit aims to educate students with Fintech
-				knowledge through events and industry projects, and connect and
-				establish relationships with industry leaders.
+			<p className="text-center text-base md:text-lg text-gray-300 mb-8 leading-relaxed">
+				NUS Fintech Summit aims to educate students with Fintech knowledge
+				through events and industry projects, and connect and establish
+				relationships with industry leaders.
 			</p>
 
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				{/* General Information */}
-				<div className="w-full border-t border-white my-2"></div>
-				<label className="block text-lg font-bold mb-1 uppercase">
+				<div className="w-full h-px bg-gradient-to-r from-transparent via-header-color to-transparent my-4"></div>
+				<label className="block text-xl font-bold mb-4 text-header-color uppercase tracking-wide">
 					General Information
 				</label>
 
 				{/* First & Last Name */}
 				<div className="flex flex-col sm:flex-row gap-4">
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							First Name*
 						</label>
 						<input
 							type="text"
 							{...register("firstName")}
-							className={`w-full rounded-lg border-2 ${
+							className={`w-full rounded-xl border-2 ${
 								errors.firstName
 									? "border-red-500"
-									: "border-white"
-							} bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent`}
+									: "border-gray-400/50"
+							} bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 						/>
 						{errors.firstName && (
 							<p className="text-red-400 text-sm mt-1">
@@ -155,17 +172,15 @@ export default function SignupForm() {
 						)}
 					</div>
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Last Name*
 						</label>
 						<input
 							type="text"
 							{...register("lastName")}
-							className={`w-full rounded-lg border-2 ${
-								errors.lastName
-									? "border-red-500"
-									: "border-white"
-							} bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent`}
+							className={`w-full rounded-xl border-2 ${
+								errors.lastName ? "border-red-500" : "border-gray-400/50"
+							} bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 						/>
 						{errors.lastName && (
 							<p className="text-red-400 text-sm mt-1">
@@ -177,15 +192,15 @@ export default function SignupForm() {
 
 				{/* Email */}
 				<div>
-					<label className="block text-sm font-semibold mb-1">
+					<label className="block text-sm font-semibold mb-2 text-gray-200">
 						Email*
 					</label>
 					<input
 						type="email"
 						{...register("email")}
-						className={`w-full rounded-lg border-2 ${
-							errors.email ? "border-red-500" : "border-white"
-						} bg-transparent text-white placeholder-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent`}
+						className={`w-full rounded-xl border-2 ${
+							errors.email ? "border-red-500" : "border-gray-400/50"
+						} bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 					/>
 					{errors.email && (
 						<p className="text-red-400 text-sm mt-1">
@@ -197,25 +212,23 @@ export default function SignupForm() {
 				{/* Faculty & Major */}
 				<div className="flex flex-col sm:flex-row gap-4">
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Faculty*
 						</label>
 						<select
 							{...register("faculty")}
-							className={`w-full rounded-lg border-2 ${
-								errors.faculty
-									? "border-red-500"
-									: "border-white"
-							} bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+							className={`w-full rounded-xl border-2 ${
+								errors.faculty ? "border-red-500" : "border-gray-400/50"
+							} bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 						>
-							<option className="bg-gray-800" value="">
+							<option className="bg-gray-800 text-white" value="">
 								Select Faculty
 							</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">
 								School of Computing
 							</option>
-							<option className="bg-gray-800">Business</option>
-							<option className="bg-gray-800">Engineering</option>
+							<option className="bg-gray-800 text-white">Business</option>
+							<option className="bg-gray-800 text-white">Engineering</option>
 						</select>
 						{errors.faculty && (
 							<p className="text-red-400 text-sm mt-1">
@@ -224,23 +237,23 @@ export default function SignupForm() {
 						)}
 					</div>
 					<div className="flex-1">
-						<label className="block text-sm font-semibold mb-1">
+						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Major*
 						</label>
 						<select
 							{...register("major")}
-							className={`w-full rounded-lg border-2 ${
-								errors.major ? "border-red-500" : "border-white"
-							} bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+							className={`w-full rounded-xl border-2 ${
+								errors.major ? "border-red-500" : "border-gray-400/50"
+							} bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 						>
-							<option className="bg-gray-800" value="">
+							<option className="bg-gray-800 text-white" value="">
 								Select Major
 							</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">
 								Computer Science
 							</option>
-							<option className="bg-gray-800">Finance</option>
-							<option className="bg-gray-800">
+							<option className="bg-gray-800 text-white">Finance</option>
+							<option className="bg-gray-800 text-white">
 								Information Systems
 							</option>
 						</select>
@@ -253,67 +266,67 @@ export default function SignupForm() {
 				</div>
 
 				{/* Hackathon Section */}
-				<div className="w-full border-t border-white my-2"></div>
-				<label className="block text-lg font-bold mb-1 uppercase">
+				<div className="w-full h-px bg-gradient-to-r from-transparent via-header-color to-transparent my-4"></div>
+				<label className="block text-xl font-bold mb-4 text-header-color uppercase tracking-wide">
 					Hackathon
 				</label>
 
 				{/* Participant Type */}
 				<div>
-					<label className="block text-sm font-semibold mb-2">
+					<label className="block text-sm font-semibold mb-4 text-gray-200">
 						Please indicate if you are applying as a team
 					</label>
 					<div className="flex flex-col space-y-3">
-						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+						<label className="flex items-center gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer relative bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								value="team"
 								{...register("participantType")}
-								className="peer h-5 w-5 accent-gold-500"
+								className="peer h-5 w-5 accent-about-button"
 							/>
-							<span className="font-medium">
+							<span className="font-medium text-gray-200">
 								Yes, I am applying as a team
 							</span>
-							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-xl border-transparent peer-checked:border-about-button"></div>
 						</label>
 
-						<label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer relative">
+						<label className="flex items-center gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer relative bg-white/5 hover:bg-white/10 transition-all duration-200">
 							<input
 								type="radio"
 								value="individual"
 								{...register("participantType")}
-								className="peer h-5 w-5 accent-gold-500"
+								className="peer h-5 w-5 accent-about-button"
 							/>
-							<span className="font-medium">
+							<span className="font-medium text-gray-200">
 								No, I am applying as an individual participant
 							</span>
-							<div className="absolute inset-0 pointer-events-none border-2 rounded-lg border-transparent peer-checked:border-yellow-500"></div>
+							<div className="absolute inset-0 pointer-events-none border-2 rounded-xl border-transparent peer-checked:border-about-button"></div>
 						</label>
 					</div>
 				</div>
 
 				{/* Team Name & Size (conditional) */}
 				{participantType === "team" && (
-					<div>
-						<div className="flex border-2 border-gray-600 rounded-lg overflow-hidden w-fit mb-4">
+					<div className="space-y-6">
+						<div className="flex border-2 border-gray-400/50 rounded-xl overflow-hidden w-fit bg-white/5">
 							<button
 								type="button"
-								onClick={() => setValue("joinTeam", false)}
-								className={`px-5 py-2 transition-colors duration-200 font-medium ${
+								onClick={() => setValue("joinTeam", false, { shouldValidate: true })}
+								className={`px-6 py-3 transition-all duration-200 font-semibold ${
 									!joinTeam
-										? "bg-yellow-500 text-white"
-										: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+										? "bg-about-button text-white shadow-lg"
+										: "bg-transparent text-gray-300 hover:bg-white/10"
 								}`}
 							>
 								New Team
 							</button>
 							<button
 								type="button"
-								onClick={() => setValue("joinTeam", true)}
-								className={`px-5 py-2 transition-colors duration-200 font-medium ${
+								onClick={() => setValue("joinTeam", true, { shouldValidate: true })}
+								className={`px-6 py-3 transition-all duration-200 font-semibold ${
 									joinTeam
-										? "bg-yellow-500 text-white"
-										: "bg-gray-700 text-gray-300 hover:bg-gray-600"
+										? "bg-about-button text-white shadow-lg"
+										: "bg-transparent text-gray-300 hover:bg-white/10"
 								}`}
 							>
 								Existing Team
@@ -323,17 +336,17 @@ export default function SignupForm() {
 						{joinTeam ? (
 							// Join existing team
 							<div>
-								<label className="block text-sm font-semibold mb-1">
+								<label className="block text-sm font-semibold mb-2 text-gray-200">
 									Existing Team Name or ID*
 								</label>
 								<input
 									type="text"
 									{...register("teamSearch")}
-									className={`w-full rounded-lg border-2 ${
+									className={`w-full rounded-xl border-2 ${
 										errors.teamSearch
 											? "border-red-500"
-											: "border-white"
-									} bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+											: "border-gray-400/50"
+									} bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 									placeholder="Enter existing team name or ID"
 								/>
 								{errors.teamSearch && (
@@ -346,17 +359,17 @@ export default function SignupForm() {
 							// Create new team
 							<div className="flex flex-col sm:flex-row gap-4">
 								<div className="flex-1">
-									<label className="block text-sm font-semibold mb-1">
+									<label className="block text-sm font-semibold mb-2 text-gray-200">
 										New Team Name*
 									</label>
 									<input
 										type="text"
 										{...register("teamName")}
-										className={`w-full rounded-lg border-2 ${
+										className={`w-full rounded-xl border-2 ${
 											errors.teamName
 												? "border-red-500"
-												: "border-white"
-										} bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+												: "border-gray-400/50"
+										} bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 										placeholder="Enter new team name"
 									/>
 									{errors.teamName && (
@@ -366,32 +379,23 @@ export default function SignupForm() {
 									)}
 								</div>
 								<div className="flex-1">
-									<label className="block text-sm font-semibold mb-1">
+									<label className="block text-sm font-semibold mb-2 text-gray-200">
 										Team Size*
 									</label>
 									<select
 										{...register("teamSize")}
-										className={`w-full rounded-lg border-2 ${
+										className={`w-full rounded-xl border-2 ${
 											errors.teamSize
 												? "border-red-500"
-												: "border-white"
-										} bg-transparent text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500`}
+												: "border-gray-400/50"
+										} bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70`}
 									>
-										<option
-											className="bg-gray-800"
-											value=""
-										>
+										<option className="bg-gray-800" value="">
 											Select Size
 										</option>
-										<option className="bg-gray-800">
-											2
-										</option>
-										<option className="bg-gray-800">
-											3
-										</option>
-										<option className="bg-gray-800">
-											4
-										</option>
+										<option className="bg-gray-800">2</option>
+										<option className="bg-gray-800">3</option>
+										<option className="bg-gray-800">4</option>
 									</select>
 									{errors.teamSize && (
 										<p className="text-red-400 text-sm mt-1">
@@ -404,66 +408,69 @@ export default function SignupForm() {
 					</div>
 				)}
 
-				{/* Problem Statement */}
-				<div>
-					<label className="block text-sm font-semibold mb-3">
-						Please select the Problem Statement*
-					</label>
-					<div className="flex flex-col space-y-3">
-						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
-							<input
-								type="radio"
-								value="ps1"
-								{...register("problemStatement")}
-								className="peer h-5 w-5 accent-gold-500 mt-1"
-							/>
-							<span className="font-medium">
-								How can AI and machine learning be applied to
-								enhance compliance and risk management for
-								financial institutions leveraging blockchain?
-							</span>
-							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
+				{/* Problem Statement (Conditionally rendered) */}
+				{!joinTeam && (
+					<div>
+						<label className="block text-sm font-semibold mb-3">
+							Please select the Problem Statement*
 						</label>
+						<div className="flex flex-col space-y-3">
+							<label className="relative flex items-start gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200">
+								<input
+									type="radio"
+									value="ps1"
+									{...register("problemStatement")}
+									className="peer h-5 w-5 accent-about-button mt-1"
+								/>
+								<span className="font-medium text-gray-200 leading-relaxed">
+									How can AI and machine learning be applied to enhance
+									compliance and risk management for financial institutions
+									leveraging blockchain?
+								</span>
+								<div className="absolute inset-0 border-2 rounded-xl border-transparent peer-checked:border-about-button pointer-events-none"></div>
+							</label>
 
-						<label className="relative flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer">
-							<input
-								type="radio"
-								value="ps2"
-								{...register("problemStatement")}
-								className="peer h-5 w-5 accent-gold-500 mt-1"
-							/>
-							<span className="font-medium">
-								How can AI and machine learning improve fintech
-								user experience and engagement?
-							</span>
-							<div className="absolute inset-0 border-2 rounded-lg border-transparent peer-checked:border-yellow-400 pointer-events-none"></div>
-						</label>
+							<label className="relative flex items-start gap-4 p-4 border-2 border-gray-400/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all duration-200">
+								<input
+									type="radio"
+									value="ps2"
+									{...register("problemStatement")}
+									className="peer h-5 w-5 accent-about-button mt-1"
+								/>
+								<span className="font-medium text-gray-200 leading-relaxed">
+									How can AI and machine learning improve fintech user
+									experience and engagement?
+								</span>
+								<div className="absolute inset-0 border-2 rounded-xl border-transparent peer-checked:border-about-button pointer-events-none"></div>
+							</label>
+						</div>
+						{errors.problemStatement && (
+							<p className="text-red-400 text-sm mt-3">
+								{errors.problemStatement.message}
+							</p>
+						)}
 					</div>
-					{errors.problemStatement && (
-						<p className="text-red-400 text-sm mt-3">
-							{errors.problemStatement.message}
-						</p>
-					)}
-				</div>
+				)}
 
 				{/* Disclaimer */}
-				<div className="flex flex-col gap-2">
-					<label className="block text-sm font-semibold">
+				<div className="flex flex-col gap-4 p-4 bg-white/5 rounded-xl border border-gray-400/30">
+					<label className="block text-sm font-semibold text-gray-200">
 						Disclaimer*
 					</label>
-					<p className="text-sm">
-						By submitting this application, I confirm that the
-						information provided is accurate...
+					<p className="text-sm text-gray-300 leading-relaxed">
+						By submitting this application, I confirm that the information
+						provided is accurate and I agree to the terms and conditions of the
+						NUS Fintech Summit Hackathon 2026.
 					</p>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-3">
 						<input
 							type="checkbox"
-							{...register("disclaimer")}
 							id="disclaimer"
-							className="h-5 w-5 rounded-md accent-gold-500"
+							{...register("disclaimer")}
+							className="h-5 w-5 rounded-md accent-about-button"
 						/>
-						<label htmlFor="disclaimer" className="text-sm">
-							I agree.
+						<label htmlFor="disclaimer" className="text-sm font-medium text-gray-200">
+							I agree to the terms and conditions.
 						</label>
 					</div>
 					{errors.disclaimer && (
@@ -473,21 +480,27 @@ export default function SignupForm() {
 					)}
 				</div>
 
-				<div className="w-full flex justify-center">
+				<div className="w-full flex justify-center pt-4">
 					<button
 						type="submit"
 						disabled={isSubmitting}
-						className="text-lg bg-indigo-600 font-semibold py-2 px-8 rounded-xl shadow hover:bg-gold-600 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
+						className="text-lg bg-about-button text-white font-bold py-4 px-12 rounded-xl shadow-lg hover:bg-about-button/90 hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:transform-none"
 					>
-						{isSubmitting ? "Submitting..." : "Submit"}
+						{isSubmitting ? "Submitting..." : "Submit Application"}
 					</button>
 				</div>
 			</form>
 
 			{status && (
-				<p className="mt-6 text-center text-sm font-medium text-white">
+				<div
+					className={`mt-6 p-4 rounded-xl text-center font-semibold ${
+						status.includes("✅")
+							? "bg-green-500/20 text-green-300 border border-green-500/30"
+							: "bg-red-500/20 text-red-300 border border-red-500/30"
+					}`}
+				>
 					{status}
-				</p>
+				</div>
 			)}
 		</div>
 	);
