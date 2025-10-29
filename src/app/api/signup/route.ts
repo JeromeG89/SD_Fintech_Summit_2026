@@ -74,9 +74,25 @@ export async function POST(req: Request) {
 	} catch (err: any) {
 		const pgError = err.cause ?? err;
 
+		// Handle unique constraint violations (e.g., duplicate email or team name)
 		if (pgError.code === "23505") {
+			// Check the error detail to see which constraint was violated
+			if (pgError.detail?.includes("email")) {
+				return NextResponse.json(
+					{ error: "This email is already registered.", field: "email" },
+					{ status: 409 }
+				);
+			}
+			// The unique constraint on the teams table is on the 'name' column
+			if (pgError.detail?.includes("name")) {
+				return NextResponse.json(
+					{ error: "A team with this name already exists.", field: "teamName" },
+					{ status: 409 }
+				);
+			}
+			// Fallback for any other unique constraint violation
 			return NextResponse.json(
-				{ error: "This email is already registered." },
+				{ error: "A unique value is already in use." },
 				{ status: 409 }
 			);
 		}
