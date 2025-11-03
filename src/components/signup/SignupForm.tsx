@@ -109,41 +109,25 @@ export default function SignupForm() {
 						<label className="block text-sm font-semibold mb-2 text-gray-200">
 						Faculty*
 						</label>
-						<select
+						<input
+							type="text"
 							name="faculty"
 							required
-							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
-						>
-							<option className="bg-gray-800 text-white" value="">
-								Select Faculty
-							</option>
-							<option className="bg-gray-800 text-white">
-								School of Computing
-							</option>
-							<option className="bg-gray-800 text-white">Business</option>
-							<option className="bg-gray-800 text-white">Engineering</option>
-						</select>
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
+							placeholder="Enter Faculty"
+						/>
 					</div>
 					<div className="flex-1">
 						<label className="block text-sm font-semibold mb-2 text-gray-200">
 							Major*
 						</label>
-						<select
+						<input
+							type="text"
 							name="major"
 							required
-							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
-						>
-							<option className="bg-gray-800 text-white" value="">
-								Select Major
-							</option>
-							<option className="bg-gray-800 text-white">
-								Computer Science
-							</option>
-							<option className="bg-gray-800 text-white">Finance</option>
-							<option className="bg-gray-800 text-white">
-								Information Systems
-							</option>
-						</select>
+							className="w-full rounded-xl border-2 border-gray-400/50 bg-white/10 text-white placeholder-gray-400 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-about-button focus:border-about-button transition-all duration-200 hover:border-gray-300/70"
+							placeholder="Enter Major"
+						/>
 					</div>
 				</div>
 
